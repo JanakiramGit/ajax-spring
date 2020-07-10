@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Select Example - Ajax</title>
+
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	
+	<link rel="stylesheet"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		crossorigin="anonymous" />
+
+</head>
+<body>
+
+<h2>We will get there...</h2>
+
+<div class="row">  
+    <div class="col-lg-3"></div>  
+    <div class="col-lg-6">  
+  
+        <div class="form-group">  
+            <label class="col-md-4 control-label">Country Name</label>  
+            <div class="col-md-6">  
+                <select class="form-control" id="ddlCountry"></select><br />  
+            </div>  
+        </div>  
+  
+        <div class="form-group">  
+            <label class="col-md-4 control-label">State Name</label>  
+            <div class="col-md-6">  
+                <select class="form-control" id="ddlState"></select>  
+                <br />  
+  
+            </div>  
+        </div>  
+        <br />  
+        <div class="form-group">  
+            <label class="col-md-4 control-label">City Name</label>  
+            <div class="col-md-6">  
+                <select class="form-control" id="ddlCity"></select>  
+  
+            </div>  
+        </div>  
+    </div>  
+    <div class="col-lg-3"></div>  
+</div>  
+
+
+<script>  
+    $(document).ready(function () {  
+  
+        var ddlCountry = $('#ddlCountry');  
+        ddlCountry.append($("<option></option>").val('').html('Please Select Country'));  
+
+        $.get("countries", function(responseJson) {
+            var $select = $("#ddlCountry");
+            $select.find("option").remove();  
+            $.each(responseJson, function(index, country) {
+            	//alert(country.countryId);
+                $("<option>").val(country.countryId).text(country.countryName).appendTo($select);
+            });                   
+             
+        });
+
+
+        $("#ddlCountry").change(function () {  
+            var countryId = parseInt($(this).val());
+
+            //alert(countryId);            
+
+            if (!isNaN(countryId)) {  
+                var ddlState = $('#ddlState');  
+                var ur = 'states/' + countryId;
+
+                //alert(ur);
+                //svar data = {'countryId': countryId}
+                
+                //ddlState.empty();  
+                ddlState.append($("<option></option>").val('').html('Please wait ...'));
+
+                $.get(ur, function(responseJson) {
+                    var $select2 = $("#ddlState");
+                    $select2.find("option").remove();  
+                    $.each(responseJson, function(index, state) {
+                        //alert(state.stateId);
+                        //alert(state.stateName);
+                        $("<option>").val(state.stateId).text(state.stateName).appendTo($select2);
+                    	//ddlState.append($("<option></option>").val(states.stateId).html(states.stateName));
+                    });                   
+                     
+                });
+
+
+// 	             $.ajax({  
+// 		             url: ur,  
+// 		             type: 'GET',  
+// 		             dataType: 'json',  
+// 		             //data: {countryId: countryId},  
+// 		             success: function (d) {  
+		
+// 		                 ddlState.empty(); // Clear the please wait  
+// 		                 ddlState.append($("<option></option>").val('').html('Select State'));  
+// 		                 $.each(d, function (i, states) {  
+// 		                     ddlState.append($("<option></option>").val(states.stateId).html(states.stateName));  
+// 		                 });  
+// 		             },  
+// 		             error: function () {  
+// 		                 alert('Error!');
+		                  
+// 		             }  
+// 		         });  
+
+            }
+        });
+
+
+        
+//         $.ajax({  
+//             url: 'http://localhost:8081/countries',  
+//             type: 'GET',  
+//             dataType: 'json',  
+//             success: function (d) {  
+//                 $.each(d, function (i, country) {  
+//                     ddlCountry.append($("<option></option>").val(country.CountryId).html(country.CountryName));  
+//                 });  
+//             },  
+//             error: function () {  
+//                 alert('Error!');  
+//             }  
+//         });  
+  
+        //State details by country id  
+  
+//         $("#ddlCountry").change(function () {  
+//             var CountryId = parseInt($(this).val());  
+  
+//             if (!isNaN(CountryId)) {  
+//                 var ddlState = $('#ddlState');  
+//                 ddlState.empty();  
+//                 ddlState.append($("<option></option>").val('').html('Please wait ...'));  
+  
+//                 debugger;  
+//                 $.ajax({  
+//                     url: 'http://localhost:54188/api/Cascading/StateDetails',  
+//                     type: 'GET',  
+//                     dataType: 'json',  
+//                     data: { CountryId: CountryId },  
+//                     success: function (d) {  
+  
+//                         ddlState.empty(); // Clear the please wait  
+//                         ddlState.append($("<option></option>").val('').html('Select State'));  
+//                         $.each(d, function (i, states) {  
+//                             ddlState.append($("<option></option>").val(states.StateId).html(states.StateName));  
+//                         });  
+//                     },  
+//                     error: function () {  
+//                         alert('Error!');  
+//                     }  
+//                 });  
+//             }   
+//         });  
+  
+//         //City Bind By satate id  
+//         $("#ddlState").change(function () {  
+//             var StateId = parseInt($(this).val());  
+//             if (!isNaN(StateId)) {  
+//                 var ddlCity = $('#ddlCity');  
+//                 ddlCity.append($("<option></option>").val('').html('Please wait ...'));  
+  
+//                 debugger;  
+//                 $.ajax({  
+//                     url: 'http://localhost:54188/api/Cascading/CityDetails',  
+//                     type: 'GET',  
+//                     dataType: 'json',  
+//                     data: { stateId: StateId },  
+//                     success: function (d) {  
+  
+  
+//                         ddlCity.empty(); // Clear the plese wait  
+//                         ddlCity.append($("<option></option>").val('').html('Select City Name'));  
+//                         $.each(d, function (i, cities) {  
+//                             ddlCity.append($("<option></option>").val(cities.CityId).html(cities.CityName));  
+//                         });  
+//                     },  
+//                     error: function () {  
+//                         alert('Error!');  
+//                     }  
+//                 });  
+//             }  
+  
+  
+//         });  
+    });  
+</script>
+
+
+</body>
+</html>
