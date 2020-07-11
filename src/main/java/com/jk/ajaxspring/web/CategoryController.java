@@ -17,7 +17,7 @@ public class CategoryController {
 	@Autowired
 	private CategoryRepository categoryRepo;
 
-	@GetMapping("/")
+	@GetMapping("/index")
 	public String home() {
 		//Return the default home page.
 		return "index";

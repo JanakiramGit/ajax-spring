@@ -29,7 +29,7 @@ public class CountryContoller {
 	@Autowired
 	private CityRepository cityRepo;
 	
-	@GetMapping("/selector")
+	@GetMapping("/")
 	public String home() {
 		//Return the default home page.
 		return "selector";
