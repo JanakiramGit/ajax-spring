@@ -46,7 +46,7 @@ public class CountryContoller {
 	
 	@RequestMapping(path = "/states/{countryId}", produces = "application/json; charset=UTF-8")
 	@ResponseBody
-	@Query(value="select * from state where country_id = ?1")
+	//@Query(value="select * from state where country_id = ?1")
 	public List<State> getStatesByCountry(@PathVariable("countryId") Long countryId){
 		
 		//Load all states of given country and return as JSON response.
@@ -56,7 +56,7 @@ public class CountryContoller {
 	
 	@RequestMapping(path = "/cities/{stateId}", produces = "application/json; charset=UTF-8")
 	@ResponseBody
-	@Query(value="select * from city where state_id = ?1")
+	//@Query(value="select * from city where state_id = ?1")
 	public List<City> getCitiesByState(@PathVariable("stateId") Long stateId){
 		
 		//Load all cities of given state and return as JSON response.
