@@ -66,9 +66,10 @@
 
         $.get("countries", function(responseJson) {
             var $select = $("#ddlCountry");
-            $select.find("option").remove();  
-            $.each(responseJson, function(index, country) {
-            	//alert(country.countryId);
+            $select.find("option").remove();
+            $("<option>").val(0).text("--Select Country--").appendTo($select)
+            
+            $.each(responseJson, function(index, country) {            	
                 $("<option>").val(country.countryId).text(country.countryName).appendTo($select);
             });                   
              
@@ -86,7 +87,11 @@
 
                 $.get(ur, function(responseJson) {
                     var $select = $("#ddlState");
-                    $select.find("option").remove();  
+                    
+                    $('#ddlCity').find("option").remove();
+                    $select.find("option").remove();                    
+                    $("<option>").val(0).text("--Select State--").appendTo($select)
+                    
                     $.each(responseJson, function(index, state) {                        
                         $("<option>").val(state.stateId).text(state.stateName).appendTo($select);                    	
                     });                   
@@ -101,13 +106,13 @@
             if (!isNaN(stateId)) {  
                 var ddlCity = $('#ddlCity');  
                 var ur = 'cities/' + stateId;
-              
-                //ddlState.empty();  
+                                
                 ddlCity.append($("<option></option>").val('').html('Please wait ...'));
 
                 $.get(ur, function(responseJson) {
                     var $select = $("#ddlCity");
-                    $select.find("option").remove();  
+                    $select.find("option").remove();
+                    
                     $.each(responseJson, function(index, city) {                        
                         $("<option>").val(city.cityId).text(city.cityName).appendTo($select);                    	
                     });                   

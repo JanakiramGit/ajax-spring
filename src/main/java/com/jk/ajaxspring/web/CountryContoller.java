@@ -1,11 +1,10 @@
 package com.jk.ajaxspring.web;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +28,7 @@ public class CountryContoller {
 	@Autowired
 	private CityRepository cityRepo;
 	
-	@GetMapping("/")
+	@RequestMapping(path = "/")	
 	public String home() {
 		//Return the default home page.
 		return "selector";
@@ -42,6 +41,15 @@ public class CountryContoller {
 		//Load all countries and return as JSON response.
 		List<Country> countries = countryRepo.findAll();
 		return countries;
+	}
+	
+	@RequestMapping(path = "/countries/{countryId}", produces = "application/json; charset=UTF-8")
+	@ResponseBody
+	public Optional<Country> findCountriesById(@PathVariable("countryId") Long countryId) {
+
+		//Load all countries and return as JSON response.
+		Optional<Country> country = countryRepo.findById(countryId);
+		return country;
 	}
 	
 	@RequestMapping(path = "/states/{countryId}", produces = "application/json; charset=UTF-8")
