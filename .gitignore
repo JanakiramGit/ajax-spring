@@ -29,3 +29,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/hs_err_pid13500.log
