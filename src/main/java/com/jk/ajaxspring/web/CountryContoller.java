@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jk.ajaxspring.model.City;
 import com.jk.ajaxspring.model.CityRepository;
@@ -34,42 +36,38 @@ public class CountryContoller {
 		return "selector";
 	}
 		
-	@RequestMapping(path = "/countries", produces = "application/json; charset=UTF-8")
-	@ResponseBody
-	public List<Country> findCountries() {
+	@GetMapping("/countries")
+	public ResponseEntity<List<Country>> findAllCountries() {
 
 		//Load all countries and return as JSON response.
 		List<Country> countries = countryRepo.findAll();
-		return countries;
-	}
+		return new ResponseEntity<>(countries, HttpStatus.OK);
+	}	
 	
-	@RequestMapping(path = "/countries/{countryId}", produces = "application/json; charset=UTF-8")
-	@ResponseBody
-	public Optional<Country> findCountriesById(@PathVariable("countryId") Long countryId) {
+	//@RequestMapping(path = "/countries/{countryId}" produces = "application/json; charset=UTF-8")
+	@GetMapping("/countries/{countryId}")	
+	public ResponseEntity<Optional> findCountryById(@PathVariable("countryId") Long countryId) {
 
-		//Load all countries and return as JSON response.
+		//Load Country with the given Id and return as JSON response.
 		Optional<Country> country = countryRepo.findById(countryId);
-		return country;
+		return new ResponseEntity<Optional>(country, HttpStatus.OK);
 	}
-	
-	@RequestMapping(path = "/states/{countryId}", produces = "application/json; charset=UTF-8")
-	@ResponseBody
-	//@Query(value="select * from state where country_id = ?1")
-	public List<State> getStatesByCountry(@PathVariable("countryId") Long countryId){
+
+	@GetMapping("/states/{countryId}")	
+	public ResponseEntity<List> getStatesByCountry(@PathVariable("countryId") Long countryId){
 		
 		//Load all states of given country and return as JSON response.
 		List<State> states = stateRepo.findAllByCountry_countryId(countryId);
-		return states;		
+		return new ResponseEntity<List>(states, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "/cities/{stateId}", produces = "application/json; charset=UTF-8")
-	@ResponseBody
+	@GetMapping("/cities/{stateId}")
 	//@Query(value="select * from city where state_id = ?1")
-	public List<City> getCitiesByState(@PathVariable("stateId") Long stateId){
+	public ResponseEntity<List> getCitiesByState(@PathVariable("stateId") Long stateId){
 		
 		//Load all cities of given state and return as JSON response.
 		List<City> cities = cityRepo.findAllByState_stateId(stateId);
-		return cities;		
+		return new ResponseEntity<List>(cities, HttpStatus.OK);		
 	}
 	
 }
